@@ -1,6 +1,8 @@
 <?php
 
+use App\Livewire\Admin\Dashboard;
 use App\Livewire\Auth\Login;
+use App\Livewire\User\Dashboard as UserDashboard;
 use App\Livewire\Welcome;
 use Illuminate\Support\Facades\Route;
 
@@ -16,6 +18,17 @@ use Illuminate\Support\Facades\Route;
 */
 
 // Auth Login
-Route::get('/login', Login::class);
+Route::get('/login', Login::class)->name('login');
 
 Route::get('/', Welcome::class);
+
+
+// Admin
+Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function(){
+    route::get('dashboard', Dashboard::class)->name('admin.dashboard');
+});
+
+// User
+Route::middleware(['auth', 'role:user'])->prefix('user')->group(function(){
+    route::get('dashboard', UserDashboard::class)->name('user.dashboard');
+});
